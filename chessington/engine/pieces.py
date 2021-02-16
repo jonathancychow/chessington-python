@@ -35,7 +35,48 @@ class Pawn(Piece):
     """
 
     def get_available_moves(self, board):
-        return []
+        current_square = board.find_piece(self)
+        colour = self.player
+        moves = []
+        if colour == Player.WHITE:
+            if current_square.row == 1:
+                if board.get_piece(Square.at(current_square.row+1,current_square.col)) is None:
+                    moves.append(Square.at(current_square.row+1,current_square.col))
+                if (board.get_piece(Square.at(current_square.row+1,current_square.col)) is None) and (board.get_piece(Square.at(current_square.row+2,current_square.col)) is None):
+                    moves.append(Square.at(current_square.row+2,current_square.col))
+            else:
+                if current_square.row+1 <= 7:
+                    if board.get_piece(Square.at(current_square.row+1,current_square.col)) is None:
+                        moves.append(Square.at(current_square.row+1,current_square.col))
+                    if current_square.col+1 <= 7:
+                        if board.get_piece(Square.at(current_square.row+1,current_square.col+1)) is not None:
+                            if (board.get_piece(Square.at(current_square.row+1,current_square.col+1)).player == Player.BLACK):
+                                moves.append(Square.at(current_square.row+1,current_square.col+1))
+                    if current_square.col-1 >= 0:
+                        if board.get_piece(Square.at(current_square.row+1,current_square.col-1)) is not None:
+                            if (board.get_piece(Square.at(current_square.row+1,current_square.col-1)).player == Player.BLACK):
+                                moves.append(Square.at(current_square.row+1,current_square.col-1))
+
+        elif colour == Player.BLACK:
+            if current_square.row == 6:
+                if board.get_piece(Square.at(current_square.row-1,current_square.col)) is None:
+                    moves.append(Square.at(current_square.row-1,current_square.col))
+                if (board.get_piece(Square.at(current_square.row-1,current_square.col)) is None) and (board.get_piece(Square.at(current_square.row-2,current_square.col)) is None):
+                    moves.append(Square.at(current_square.row-2,current_square.col))
+            else:
+                if current_square.row-1 >= 0:
+                    if board.get_piece(Square.at(current_square.row-1,current_square.col)) is None:
+                        moves.append(Square.at(current_square.row-1,current_square.col))
+                    if current_square.col+1 <= 7:
+                        if board.get_piece(Square.at(current_square.row-1,current_square.col+1)) is not None:
+                            if (board.get_piece(Square.at(current_square.row-1,current_square.col+1)).player == Player.WHITE):
+                                moves.append(Square.at(current_square.row-1,current_square.col+1))
+                    if current_square.col-1 >= 0:
+                        if board.get_piece(Square.at(current_square.row-1,current_square.col-1)) is not None:
+                            if (board.get_piece(Square.at(current_square.row-1,current_square.col-1)).player == Player.WHITE):
+                                moves.append(Square.at(current_square.row-1,current_square.col-1))
+
+        return moves
 
 
 class Knight(Piece):
@@ -44,6 +85,74 @@ class Knight(Piece):
     """
 
     def get_available_moves(self, board):
+        current_square = board.find_piece(self)
+        colour = self.player
+        moves = []
+        #above
+        if current_square.row+2 <= 7:
+            if (board.get_piece(Square.at(current_square.row+1,current_square.col)) is None) and (board.get_piece(Square.at(current_square.row+2,current_square.col)) is None):
+                # up and right
+                if current_square.col+1 <= 7:
+                    if board.get_piece(Square.at(current_square.row+2,current_square.col+1)) is None:
+                        moves.append(Square.at(current_square.row+2,current_square.col+1))
+                    elif (board.get_piece(Square.at(current_square.row+2,current_square.col+1)).player != colour):
+                        moves.append(Square.at(current_square.row+2,current_square.col+1))
+                # up and left
+                if current_square.col-1 >= 0:
+                    if board.get_piece(Square.at(current_square.row+2,current_square.col-1)) is None:
+                        moves.append(Square.at(current_square.row+2,current_square.col-1))
+                    elif (board.get_piece(Square.at(current_square.row+2,current_square.col-1)).player != colour):
+                        moves.append(Square.at(current_square.row+2,current_square.col-1))
+
+        #down
+        if current_square.row-2 >= 0:
+            if (board.get_piece(Square.at(current_square.row-1,current_square.col)) is None) and (board.get_piece(Square.at(current_square.row-2,current_square.col)) is None):
+                # up and right
+                if current_square.col+1 <= 7:
+                    if board.get_piece(Square.at(current_square.row-2,current_square.col+1)) is None:
+                        moves.append(Square.at(current_square.row-2,current_square.col+1))
+                    elif (board.get_piece(Square.at(current_square.row-2,current_square.col+1)).player != colour):
+                        moves.append(Square.at(current_square.row-2,current_square.col+1))
+                # up and left
+                if current_square.col-1 >= 0:
+                    if board.get_piece(Square.at(current_square.row-2,current_square.col-1)) is None:
+                        moves.append(Square.at(current_square.row-2,current_square.col-1))
+                    elif (board.get_piece(Square.at(current_square.row-2,current_square.col-1)).player != colour):
+                        moves.append(Square.at(current_square.row-2,current_square.col-1))
+   
+        #right
+        if current_square.col+2 <= 7:
+            if (board.get_piece(Square.at(current_square.row,current_square.col+2)) is None) and (board.get_piece(Square.at(current_square.row,current_square.col+1)) is None):
+                
+                if current_square.row+1 <= 7:
+                    if board.get_piece(Square.at(current_square.row+1,current_square.col+2)) is None:
+                        moves.append(Square.at(current_square.row+1,current_square.col+2))
+                    elif (board.get_piece(Square.at(current_square.row+1,current_square.col+2)).player != colour):
+                        moves.append(Square.at(current_square.row+1,current_square.col+2))
+                
+                if current_square.row-1 >= 0:
+                    if board.get_piece(Square.at(current_square.row-1,current_square.col+2)) is None:
+                        moves.append(Square.at(current_square.row-1,current_square.col+2))
+                    elif (board.get_piece(Square.at(current_square.row-1,current_square.col+2)).player != colour):
+                        moves.append(Square.at(current_square.row-1,current_square.col+2))
+
+        #left
+        if current_square.col-2 >= 0:
+            if (board.get_piece(Square.at(current_square.row,current_square.col-2)) is None) and (board.get_piece(Square.at(current_square.row,current_square.col-1)) is None):
+                
+                if current_square.row+1 <= 7:
+                    if board.get_piece(Square.at(current_square.row+1,current_square.col-2)) is None:
+                        moves.append(Square.at(current_square.row+1,current_square.col-2))
+                    elif (board.get_piece(Square.at(current_square.row+1,current_square.col-2)).player != colour):
+                        moves.append(Square.at(current_square.row+1,current_square.col-2))
+                
+                if current_square.row-1 >= 0:
+                    if board.get_piece(Square.at(current_square.row-1,current_square.col-2)) is None:
+                        moves.append(Square.at(current_square.row-1,current_square.col-2))
+                    elif (board.get_piece(Square.at(current_square.row-1,current_square.col-2)).player != colour):
+                        moves.append(Square.at(current_square.row-1,current_square.col-2))
+   
+
         return []
 
 
@@ -80,4 +189,53 @@ class King(Piece):
     """
 
     def get_available_moves(self, board):
-        return []
+        current_square = board.find_piece(self)
+        colour = self.player
+        moves = []
+
+        #above
+        if current_square.row+1 <= 7:
+            if board.get_piece(Square.at(current_square.row+1,current_square.col)) is None:
+                moves.append(Square.at(current_square.row+1,current_square.col))
+            elif (board.get_piece(Square.at(current_square.row+1,current_square.col)).player != colour):
+                    moves.append(Square.at(current_square.row+1,current_square.col))
+            if current_square.col+1 <= 7:
+                if board.get_piece(Square.at(current_square.row+1,current_square.col+1)) is None:
+                    moves.append(Square.at(current_square.row+1,current_square.col+1))
+                elif (board.get_piece(Square.at(current_square.row+1,current_square.col+1)).player != colour):
+                    moves.append(Square.at(current_square.row+1,current_square.col+1))
+            if current_square.col-1 >= 0:
+                if board.get_piece(Square.at(current_square.row+1,current_square.col-1)) is None:
+                    moves.append(Square.at(current_square.row+1,current_square.col-1))
+                elif (board.get_piece(Square.at(current_square.row+1,current_square.col-1)).player != colour):
+                    moves.append(Square.at(current_square.row+1,current_square.col-1))
+        #side
+        if current_square.col+1 <= 7:
+            if board.get_piece(Square.at(current_square.row,current_square.col+1)) is None:
+                moves.append(Square.at(current_square.row,current_square.col+1))
+            elif (board.get_piece(Square.at(current_square.row,current_square.col+1)).player != colour):
+                moves.append(Square.at(current_square.row,current_square.col+1))
+        if current_square.col-1 >= 0:
+            if board.get_piece(Square.at(current_square.row,current_square.col-1)) is None:
+                moves.append(Square.at(current_square.row,current_square.col-1))
+            elif (board.get_piece(Square.at(current_square.row,current_square.col-1)).player != colour):
+                moves.append(Square.at(current_square.row,current_square.col-1))
+
+        #below
+        if current_square.row-1 <= 7:
+            if board.get_piece(Square.at(current_square.row-1,current_square.col)) is None:
+                moves.append(Square.at(current_square.row-1,current_square.col))
+            elif (board.get_piece(Square.at(current_square.row-1,current_square.col)).player != colour):
+                    moves.append(Square.at(current_square.row-1,current_square.col))
+            if current_square.col-1 <= 7:
+                if board.get_piece(Square.at(current_square.row-1,current_square.col+1)) is None:
+                    moves.append(Square.at(current_square.row-1,current_square.col+1))
+                elif (board.get_piece(Square.at(current_square.row-1,current_square.col+1)).player != colour):
+                    moves.append(Square.at(current_square.row-1,current_square.col+1))
+            if current_square.col-1 >= 0:
+                if board.get_piece(Square.at(current_square.row-1,current_square.col-1)) is None:
+                    moves.append(Square.at(current_square.row-1,current_square.col-1))
+                elif (board.get_piece(Square.at(current_square.row-1,current_square.col-1)).player != colour):
+                    moves.append(Square.at(current_square.row-1,current_square.col-1))
+
+        return moves
